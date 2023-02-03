@@ -30,33 +30,17 @@ for (const file of commandFiles) {
     }
 }
 
-// run code once client is ready
-client.once(Events.ClientReady, c => {
-    console.log(`Logged in as ${c.user.tag}!`);
-});
-
-client.on(Events.InteractionCreate, async interaction => {
-    // makes sure the interaction is for a command
-    if (!interaction.isChatInputCommand()) return;
-
-    // makes sure the command exists in the commands collection
-    // bot client object will always be available at `interaction.client`
-    const command = interaction.client.commands.get(interaction.commandName);
-    if (!command) {
-        console.log(`[GRAVE] La comando '${interaction.commandName}' no existe.`);
-        return;
+const eventsPath = path.join(__dirname, "events");
+const eventFiiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+for (const file of eventFiiles){
+    const filePath = path.join(eventsPath, file);
+    const event = require(filePath);
+    if(event.once){
+        client.once(event.name, (...args) => event.execute(...args));
+    }else{
+        client.on(event.name, (...args) => event.execute(...args))
     }
-
-    // execute the command
-    try {
-        await command.execute(interaction);
-
-    } catch (error) {
-        console.error(error);
-        await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-    }
-    console.log(interaction);
-});
+}
 
 
 // login to discord
