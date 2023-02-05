@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-
+const createMovieRequest = require('../db_operations/create-movie-request');
 module.exports = {
     data: new SlashCommandBuilder()
                 .setName('recommend')
@@ -28,7 +28,7 @@ module.exports = {
 
         // db connection to insert into database
         // insert into db using title casing
-
+        await createMovieRequest(title, rating);
         await interaction.editReply({content: `Thank you for recommending '${title}' and giving it a ${rating.toFixed(1)}/10`})        
     },
 };
