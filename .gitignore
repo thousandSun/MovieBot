@@ -3,4 +3,4 @@ node_modules/
 .eslintrc.json
 config.json
 .sqlite
-prisma/
+prisma/db.sqlite
