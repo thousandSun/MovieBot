@@ -3,4 +3,6 @@ node_modules/
 .eslintrc.json
 config.json
 .sqlite
+prisma/db.sqilte
 prisma/db.sqlite
+.DS_Store
