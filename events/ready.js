@@ -68,11 +68,11 @@ module.exports = {
                     }
                 }
 
-                const message = await channel.send({ content: `@everyone It's Friday, that means movie poll time! (You have 30 mintes to vote)`, embeds: [pollEmbed], fetchReply: true });
+                const message = await channel.send({ content: `@everyone It's Friday, that means movie poll time! (You have 1 hour to vote)`, embeds: [pollEmbed], fetchReply: true });
                 const filter = (reaction, user) => {
                     return botReaction.includes(reaction.emoji.name)
                 };
-                const collector = message.createReactionCollector({ filter, time: 20000 });
+                const collector = message.createReactionCollector({ filter, time: 1000*60*60 });
 
                 collector.on('end', async collected => {
                     let winner = null;
