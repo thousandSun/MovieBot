@@ -4,9 +4,12 @@ const prisma = new PrismaClient()
 
 async function readMovieRequest() {
     const movies = await prisma.movie.findMany({
-      take: 4,
       where: {
         watched: false
+      },
+      select: {
+        title: true,
+        rating: true
       }
     });
     return movies;

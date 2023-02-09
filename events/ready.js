@@ -19,7 +19,18 @@ module.exports = {
                 // replace `Movie n` with movie name
 
 
-                const movies = await readMovieRequest();
+                const result = await readMovieRequest();
+                const shuffleArray = array => {
+                    for(let i = array.length-1; i > 0; i--){
+                        const j = Math.floor(Math.random()*(i+1));
+                        const temp = array[i];
+                        array[i] = array[j];
+                        array[j] = temp;
+                    }
+                }
+                shuffleArray(result);
+
+                const movies = result.slice(0,4);
 
                 const reactions = ['4️⃣', '3️⃣', '2️⃣', '1️⃣'];
                 const pollMovies = [];
