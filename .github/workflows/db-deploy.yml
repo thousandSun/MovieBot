@@ -1,4 +1,3 @@
-yml
 name: publishes new db schema changes
 on:
   push:

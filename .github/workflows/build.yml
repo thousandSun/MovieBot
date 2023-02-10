@@ -1,4 +1,3 @@
-yml
 name: Discord bot for MovieNight server
 on:
   push:
