@@ -1,0 +1,22 @@
+yml
+name: publishes new db schema changes
+on:
+  push:
+    paths:
+      - 'prisma/schema.prisma'
+
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: stops pm2
+      run: npx pm2 stop "npm run start"
+    - name: checkout repo
+      uses: actions/checkout@v3
+    - name: generates prisma client
+      run: sudo npx prisma generate
+    - name: pushes the prisam db
+      run: sudo npx prisma db push
+    - name: make sure the bot has access to db file
+      run: sudo chown shinigami:shinigami db.sqlite
