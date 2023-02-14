@@ -7,6 +7,28 @@ module.exports = {
     name: Events.ClientReady,
     once: true,
     execute(client) {
+        // testing code
+
+
+        const sendDailyJoke = new cron('0 8 * * *', async function () {
+            const guild = await client.guilds.cache.get('1070448397653397585')
+            if (guild) {
+                const botTestingChannel = guild.channels.cache.get('1074847238590844999')
+                fetch('https://v2.jokeapi.dev/joke/Dark')
+                    .then(response => {
+                        return response.json();
+                    })
+                    .then(joke => {
+                        console.log(joke);
+                        if (joke.type === 'twopart') {
+                            botTestingChannel.send({ content: joke.setup });
+                            botTestingChannel.send({ content: joke.delivery });
+                        } else {
+                            botTestingChannel.send({ content: joke.joke });
+                        }
+                    })
+            }
+        })
 
         const sendFridayPoll = new cron('0 17 * * 5', async function () {
             const guild = await client.guilds.cache.get('1070448397653397585');
@@ -26,9 +48,9 @@ module.exports = {
                         }
                     }
                     shuffleArray(result);
-    
+
                     const movies = result.slice(0,4);
-    
+
                     const reactions = ['4️⃣', '3️⃣', '2️⃣', '1️⃣'];
                     const pollMovies = [];
                     const botReaction = []
@@ -49,7 +71,7 @@ module.exports = {
                             inline: true
                         };
                         pollMovies.push(m);
-    
+
                         if (cnt % 2 == 0) {
                             pushEnd = false
                             pollMovies.push(emptyField);
@@ -61,7 +83,7 @@ module.exports = {
                     if (pushEnd) {
                         pollMovies.push(emptyField);
                     }
-    
+
                     const pollEmbed = {
                         color: 0xE05263,
                         title: ':bangbang:Movie Night Poll:bangbang:',
@@ -75,13 +97,13 @@ module.exports = {
                             text: '🎉 Thank you for participating in this poll. See you next week! 🎉'
                         }
                     }
-    
+
                     const message = await channel.send({ content: `@everyone It's Friday, that means movie poll time! (You have 1 hour to vote)`, embeds: [pollEmbed], fetchReply: true });
                     const filter = (reaction, user) => {
                         return botReaction.includes(reaction.emoji.name)
                     };
                     const collector = message.createReactionCollector({ filter, time: 1000*60*60 });
-    
+
                     collector.on('end', async collected => {
                         let winner = null;
                         if (collected.size == 0) {
@@ -121,6 +143,7 @@ module.exports = {
             }
         });
         sendFridayPoll.start();
+        sendDailyJoke.start();
         console.log(`Ready! Logged in as ${client.user.tag}`);
     }
 };
